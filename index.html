@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CaptionCraft</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="scene">
+    <div class="orb orb-a"></div>
+    <div class="orb orb-b"></div>
+    <div class="orb orb-c"></div>
+
+    <header class="navbar">
+      <div class="brand-wrap">
+        <span class="brand-name">CaptionCraft</span>
+        <span class="brand-sub">Image Caption Generator</span>
+      </div>
+      <nav class="nav-links">
+        <a href="#studio">Studio</a>
+        <a href="#features">Features</a>
+        <a href="#footer">Contact</a>
+      </nav>
+    </header>
+
+    <main class="landing" id="studio">
+
+      <section class="hero-panel center-text">
+        <h1>Create Clean Captions<br>From Your Images</h1>
+        <p class="hero-copy">
+          Upload a photo, preview it instantly, and generate a caption with one click.
+        </p>
+      </section>
+
+      <div class="studio-card">
+
+        <!-- Upload Zone -->
+        <div class="upload-area" id="uploadArea">
+          <input type="file" id="fileInput" accept="image/*" />
+          <div class="upload-art">
+            <div class="upload-ring ring-one"></div>
+            <div class="upload-ring ring-two"></div>
+            <div class="upload-core">+</div>
+          </div>
+          <h2>Drop or choose an image</h2>
+          <p>Supports JPG, PNG, WEBP, GIF</p>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-wrap" id="previewWrap">
+          <img id="preview" alt="Preview" />
+          <div class="preview-meta" id="previewMeta"></div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="btn-row">
+          <button id="generateBtn" type="button" onclick="generateCaption()">
+            <span class="btn-spinner" id="spinner"></span>
+            <span id="btnLabel">Generate caption</span>
+          </button>
+          <button id="resetBtn" type="button" onclick="resetApp()">Reset</button>
+        </div>
+
+        <!-- Result -->
+        <div class="result-box" id="resultBox">
+          <div class="result-label">Generated caption</div>
+          <p id="captionText"></p>
+          <button class="copy-btn" id="copyBtn" onclick="copyCaption()">Copy</button>
+        </div>
+
+        <!-- Error -->
+        <div class="error" id="errorMsg"></div>
+
+      </div>
+
+      
+
+    </main>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>
