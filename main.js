@@ -14,7 +14,6 @@ const copyBtn     = document.getElementById("copyBtn");
 
 let selectedFile = null;
 let currentCaption = "";
-const GEMINI_API_KEY = "AIzaSyBgd_LFD6b23YPNXi6SeuSJOraYEAlb9d8";
 
 generateBtn.addEventListener("click", generateCaption);
 resetBtn.addEventListener("click", resetApp);
@@ -51,11 +50,6 @@ async function generateCaption() {
     return;
   }
 
-  if (GEMINI_API_KEY === "your_gemini_api_key_here") {
-    showError("Please Enter Your Gemini API key in main.js");
-    return;
-  }
-
   setLoading(true);
   resultBox.style.display = "none";
   errorMsg.style.display = "none";
@@ -64,19 +58,11 @@ async function generateCaption() {
     const base64Image = await fileToBase64(selectedFile);
     const base64Data = base64Image.split(",")[1];
     const payload = {
-      contents: [{
-        parts: [
-          { text: "Write a short, engaging, clean and highly descriptive caption for this image. Just return the caption text." },
-          {
-            inlineData: {
-              mimeType: selectedFile.type,
-              data: base64Data
-            }
-          }
-        ]
-      }]
+      base64Data: base64Data,
+      mimeType: selectedFile.type
     };
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+
+    const response = await fetch("/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -84,11 +70,11 @@ async function generateCaption() {
 
     if (!response.ok) {
       const errData = await response.json();
-      throw new Error(errData.error?.message || "Failed To Fetch From API");
+      throw new Error(errData.error || "Failed To Fetch From API");
     }
 
     const data = await response.json();
-    const rawCaption = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    const rawCaption = data.caption;
 
     if (!rawCaption) {
       throw new Error("Caption Generation Returned Empty.");
