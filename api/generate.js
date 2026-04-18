@@ -1,5 +1,4 @@
 export default async function handler(req, res) {
-  // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -10,7 +9,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing image data' });
   }
 
-  // Read the Gemini API Key from Vercel Environment Variables
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
   if (!GEMINI_API_KEY) {
@@ -49,8 +47,6 @@ export default async function handler(req, res) {
     if (!rawCaption) {
       throw new Error("Caption Generation Returned Empty.");
     }
-
-    // Return the successful caption to the frontend
     return res.status(200).json({ caption: rawCaption });
 
   } catch (error) {
