@@ -1,5 +1,3 @@
-const HUGGINGFACE_URL = "https://api-inference.huggingface.co/models/Salesforce/blip-image-captioning-large";
-
 const fileInput   = document.getElementById("fileInput");
 const uploadArea  = document.getElementById("uploadArea");
 const previewWrap = document.getElementById("previewWrap");
@@ -12,11 +10,15 @@ const captionText = document.getElementById("captionText");
 const errorMsg    = document.getElementById("errorMsg");
 const spinner     = document.getElementById("spinner");
 const btnLabel    = document.getElementById("btnLabel");
+const copyBtn     = document.getElementById("copyBtn");
 
 let selectedFile = null;
 let currentCaption = "";
+const GEMINI_API_KEY = "AIzaSyBgd_LFD6b23YPNXi6SeuSJOraYEAlb9d8";
 
-/* ================= IMAGE UPLOAD ================= */
+generateBtn.addEventListener("click", generateCaption);
+resetBtn.addEventListener("click", resetApp);
+copyBtn.addEventListener("click", copyCaption);
 
 fileInput.addEventListener("change", function (e) {
   const file = e.target.files[0];
@@ -43,11 +45,14 @@ fileInput.addEventListener("change", function (e) {
   reader.readAsDataURL(file);
 });
 
-/* ================= GENERATE ================= */
-
 async function generateCaption() {
   if (!selectedFile) {
-    showError("Please choose an image first");
+    showError("Please Choose An Image First");
+    return;
+  }
+
+  if (GEMINI_API_KEY === "your_gemini_api_key_here") {
+    showError("Please Enter Your Gemini API key in main.js");
     return;
   }
 
@@ -56,60 +61,52 @@ async function generateCaption() {
   errorMsg.style.display = "none";
 
   try {
-    const raw = await requestHuggingFaceCaption(selectedFile);
-    const caption = normalizeCaption(raw);
+    const base64Image = await fileToBase64(selectedFile);
+    const base64Data = base64Image.split(",")[1];
+    const payload = {
+      contents: [{
+        parts: [
+          { text: "Write a short, engaging, clean and highly descriptive caption for this image. Just return the caption text." },
+          {
+            inlineData: {
+              mimeType: selectedFile.type,
+              data: base64Data
+            }
+          }
+        ]
+      }]
+    };
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
 
-    if (!caption) {
-      throw new Error("No caption returned.");
+    if (!response.ok) {
+      const errData = await response.json();
+      throw new Error(errData.error?.message || "Failed To Fetch From API");
     }
 
-    currentCaption = caption;
-    captionText.textContent = caption;
+    const data = await response.json();
+    const rawCaption = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+    if (!rawCaption) {
+      throw new Error("Caption Generation Returned Empty.");
+    }
+
+    const cleanCaption = normalizeCaption(rawCaption);
+
+    currentCaption = cleanCaption;
+    captionText.textContent = cleanCaption;
     resultBox.style.display = "block";
 
   } catch (err) {
     console.error(err);
-    showError(err.message || "Caption generation failed. API might be rate-limited.");
+    showError(err.message || "Failed To Generate Caption. Please Try Again.");
   } finally {
     setLoading(false);
   }
 }
-
-async function requestHuggingFaceCaption(file) {
-  // Hugging Face inference API without an auth token often works but can be rate-limited.
-  // It may also return 503 if the model is currently loading into server memory.
-  let response;
-  try {
-    response = await fetch(HUGGINGFACE_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": file.type
-      },
-      body: file
-    });
-  } catch(err) {
-      throw new Error("Network error. Could not connect to API.");
-  }
-
-  const data = await response.json();
-
-  if (!response.ok) {
-    if (response.status === 503 && data.estimated_time) {
-      throw new Error(`Model is loading. Please try again in ${Math.round(data.estimated_time)} seconds.`);
-    } else {
-      throw new Error(data.error || "Failed to generate caption.");
-    }
-  }
-
-  // Hugging Face typically returns an array for this pipeline: [{ "generated_text": "..." }]
-  if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
-    return data[0].generated_text;
-  }
-
-  return "";
-}
-
-/* ================= HELPERS ================= */
 
 function normalizeCaption(text) {
   return String(text || "")
@@ -133,9 +130,8 @@ function setLoading(on) {
 function copyCaption() {
   if (!currentCaption) return;
   navigator.clipboard.writeText(currentCaption).then(() => {
-    const btn = document.getElementById("copyBtn");
-    btn.textContent = "Copied!";
-    setTimeout(() => btn.textContent = "Copy", 1500);
+    copyBtn.textContent = "Copied!";
+    setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
   });
 }
 
@@ -154,8 +150,11 @@ function resetApp() {
 
   fileInput.value = "";
 }
-
-// Bind functions from HTML event handlers if needed, or by direct listeners (since HTML used onclick)
-window.generateCaption = generateCaption;
-window.resetApp = resetApp;
-window.copyCaption = copyCaption;
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}

@@ -16,7 +16,7 @@ html {
   scroll-behavior: smooth;
 }
 
-/* ── SCROLLABLE body ───────────────────────────────────── */
+
 html, body {
   min-height: 100%;
   height: auto;
@@ -31,21 +31,20 @@ body {
     radial-gradient(circle at 80% 15%, rgba(139, 92, 246, 0.22), transparent 24%),
     radial-gradient(circle at 20% 85%, rgba(249, 115, 22, 0.12), transparent 22%),
     linear-gradient(135deg, var(--bg-a), var(--bg-b) 48%, var(--bg-c));
-  overflow-x: hidden;   /* allow vertical scroll, block horizontal */
+  overflow-x: hidden;  
   overflow-y: auto;
 }
 
-/* ── SCENE wrapper ─────────────────────────────────────── */
+
 .scene {
   position: relative;
   min-height: 100vh;
   padding: 90px 20px 20px;
-  overflow: visible;    /* must be visible so children can scroll */
+  overflow: visible;   
 }
-
 .scene::before {
   content: "";
-  position: fixed;      /* fixed so grid stays behind scroll */
+  position: fixed;     
   inset: 0;
   background-image:
     linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
@@ -56,7 +55,7 @@ body {
   z-index: 0;
 }
 
-/* ── ORBS ──────────────────────────────────────────────── */
+
 .orb {
   position: fixed;
   border-radius: 50%;
@@ -87,7 +86,7 @@ body {
   box-shadow: 0 0 50px rgba(249,115,22,0.24);
 }
 
-/* ── NAVBAR ────────────────────────────────────────────── */
+
 .navbar {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -136,7 +135,7 @@ body {
   color: #eef8ff;
 }
 
-/* ── MAIN LANDING COLUMN ───────────────────────────────── */
+
 .landing {
   position: relative;
   z-index: 1;
@@ -148,7 +147,7 @@ body {
   align-items: stretch;
 }
 
-/* ── HERO ──────────────────────────────────────────────── */
+
 .hero-panel {
   padding: 24px 8px 8px;
 }
@@ -172,7 +171,7 @@ body {
   line-height: 1.75;
 }
 
-/* ── STUDIO CARD ───────────────────────────────────────── */
+
 .studio-card {
   border-radius: 28px;
   border: 1px solid var(--line);
@@ -181,7 +180,7 @@ body {
   padding: 20px;
 }
 
-/* ── UPLOAD AREA ───────────────────────────────────────── */
+
 .upload-area {
   position: relative;
   padding: 32px 20px 36px;
@@ -216,7 +215,7 @@ body {
   z-index: 2;
 }
 
-/* ── UPLOAD ART (rings + core) ─────────────────────────── */
+
 .upload-art {
   position: relative;
   width: 110px;
@@ -278,7 +277,7 @@ body {
   font-size: 0.86rem;
 }
 
-/* ── PREVIEW ───────────────────────────────────────────── */
+
 .preview-wrap {
   display: none;
   margin-bottom: 4px;
@@ -306,7 +305,7 @@ body {
   text-transform: uppercase;
 }
 
-/* ── BUTTONS ───────────────────────────────────────────── */
+
 .btn-row {
   display: flex;
   gap: 12px;
@@ -353,7 +352,7 @@ body {
   transform: none;
 }
 
-/* spinner inside button */
+
 .btn-spinner {
   display: none;
   width: 14px;
@@ -369,7 +368,7 @@ body {
   to { transform: rotate(360deg); }
 }
 
-/* ── RESULT BOX ────────────────────────────────────────── */
+
 .result-box {
   display: none;
   margin-top: 16px;
@@ -412,7 +411,7 @@ body {
   background: rgba(255,255,255,0.13);
 }
 
-/* ── ERROR ─────────────────────────────────────────────── */
+
 .error {
   display: none;
   margin-top: 12px;
@@ -425,7 +424,7 @@ body {
   line-height: 1.6;
 }
 
-/* ── FEATURES ──────────────────────────────────────────── */
+
 .features {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -468,7 +467,7 @@ body {
   line-height: 1.55;
 }
 
-/* ── FOOTER ────────────────────────────────────────────── */
+
 .site-footer {
   display: flex;
   justify-content: space-between;
@@ -489,8 +488,6 @@ body {
 .site-footer a:hover {
   color: #8ce0ff;
 }
-
-/* ── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 720px) {
   .scene {
     padding: 82px 14px 14px;

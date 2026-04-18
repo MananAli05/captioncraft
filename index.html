@@ -32,10 +32,7 @@
           Upload a photo, preview it instantly, and generate a caption with one click.
         </p>
       </section>
-
       <div class="studio-card">
-
-        <!-- Upload Zone -->
         <div class="upload-area" id="uploadArea">
           <input type="file" id="fileInput" accept="image/*" />
           <div class="upload-art">
@@ -46,38 +43,27 @@
           <h2>Drop or choose an image</h2>
           <p>Supports JPG, PNG, WEBP, GIF</p>
         </div>
-
-        <!-- Preview -->
         <div class="preview-wrap" id="previewWrap">
           <img id="preview" alt="Preview" />
           <div class="preview-meta" id="previewMeta"></div>
         </div>
-
-        <!-- Buttons -->
         <div class="btn-row">
-          <button id="generateBtn" type="button" onclick="generateCaption()">
+          <button id="generateBtn" type="button">
             <span class="btn-spinner" id="spinner"></span>
             <span id="btnLabel">Generate caption</span>
           </button>
-          <button id="resetBtn" type="button" onclick="resetApp()">Reset</button>
+          <button id="resetBtn" type="button">Reset</button>
         </div>
 
-        <!-- Result -->
         <div class="result-box" id="resultBox">
           <div class="result-label">Generated caption</div>
           <p id="captionText"></p>
-          <button class="copy-btn" id="copyBtn" onclick="copyCaption()">Copy</button>
+          <button class="copy-btn" id="copyBtn">Copy</button>
         </div>
-
-        <!-- Error -->
         <div class="error" id="errorMsg"></div>
-
       </div>
-
-      
-
     </main>
   </div>
-  <script src="main.js"></script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
