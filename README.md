@@ -1,6 +1,6 @@
 # CaptionCraft – AI Image Caption Generator
 
-**[🚀 Try the Live Demo here!](https://captioncraft-virid.vercel.app/)**
+**[Try the Live Demo here!](https://captioncraft-virid.vercel.app/)**
 
 A web-based image caption generator using AI models to analyze images and produce human-like captions. Includes image preview, upload system, and responsive UI for smooth user experience.
 ## Features
